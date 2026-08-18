@@ -20,7 +20,11 @@ fi
 ########################################
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
-OUT="${SRC}../data/${LV2OUT}${DATE}${LV1LABEL}/"  ## path output directory
+if [ -z "${LV2OUT+x}" ]; then
+  OUT="${SRC}../data/${LV2OUT}${DATE}${LV1LABEL}/"  ## path output directory
+else
+  OUT="${LV2OUT}${DATE}${LV1LABEL}/"  ## path output directory
+fi
 CNFSRC="${SRC}conf/"
 CNFOUT="${OUT}conf/"
 VAMP="vampire-parallel"
@@ -34,7 +38,7 @@ META="${OUT}meta/"  # meta data
 # prepare input and output
 #######################################
 mkdir -p "$META" "$CNFOUT"
-cp $0 $OUT
+cp ${BASH_SOURCE[0]} $OUT
 cp $EXCSRC $EXCOUT
 prepCnf $CNFSRC      \
         $CNFOUT      \

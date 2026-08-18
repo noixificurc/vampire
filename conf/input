@@ -23,7 +23,7 @@ material:file = ./conf/mn3sn.mat
 # Simulation attributes:
 #------------------------------------------
 sim:temperature = 0.0
-sim:time-steps-increment = 800
+sim:time-steps-increment = 1000
 sim:total-time-steps     = 5000000
 sim:time-step = 1 !fs
 

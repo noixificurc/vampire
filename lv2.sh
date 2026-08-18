@@ -3,8 +3,11 @@
 #######################################
 # paths
 #######################################
-LV2OUT="$(date +'%y%m%d-%H%M%S')/"  # level 2 output
-LV1="$(pwd)/lv1.sh"  # level 1 script
+LV2SRC="$(pwd)/"
+LV2DATE="$(date +'%y%m%d-%H%M%S')"  # level 2 output
+LV2OUT="${LV2SRC}../data/${LV2DATE}/"  # level 2 output
+LV1="${LV2SRC}/lv1.sh"  # level 1 script
+AISO=0.0
 
 
 #######################################
