@@ -11,7 +11,7 @@ if [ -z "${DMI1+x}" ]; then
   DMI1=7e-22
 fi 
 if [ -z "${AISO+x}" ]; then
-  AISO=-3e-23
+  AISO=3e-23
 fi
 
 
