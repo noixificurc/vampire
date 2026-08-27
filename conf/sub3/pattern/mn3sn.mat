@@ -38,7 +38,7 @@ material[2]:initial-spin-direction = -1,+1,0
 #material[2]:initial-spin-direction = -1,-1,0
 #material[2]:initial-spin-direction = 0,1,0
 #---------------------------------------------------
-# Material 2 Mn
+# Material 3 Mn
 #---------------------------------------------------
 material[3]:material-name=Mn
 material[3]:material-element = N

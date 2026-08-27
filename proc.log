@@ -1,0 +1,30 @@
+|------------------------------------------------------------|
+|              Vampire Data Converter for v5+                |
+|------------------------------------------------------------|
+Processing snapshot 00000000
+Processing snapshot 00000001
+Processing snapshot 00000002
+Processing snapshot 00000003
+Processing snapshot 00000004
+Processing snapshot 00000005
+/var/lib/slurm/slurmd/job58506/slurm_script: line 82: povray: command not found
+|------------------------------------------------------------|
+|              Vampire Data Converter for v5+                |
+|------------------------------------------------------------|
+Processing snapshot 00000000
+Processing snapshot 00000001
+Processing snapshot 00000002
+Processing snapshot 00000003
+Processing snapshot 00000004
+Processing snapshot 00000005
+/var/lib/slurm/slurmd/job58587/slurm_script: line 82: povray: command not found
+|------------------------------------------------------------|
+|              Vampire Data Converter for v5+                |
+|------------------------------------------------------------|
+Processing snapshot 00000000
+Processing snapshot 00000001
+Processing snapshot 00000002
+Processing snapshot 00000003
+Processing snapshot 00000004
+Processing snapshot 00000005
+/var/lib/slurm/slurmd/job58588/slurm_script: line 82: povray: command not found
