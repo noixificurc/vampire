@@ -10,23 +10,39 @@
 ##SBATCH --exclude=r2,r3,r4,r5
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
-#SBATCH --gres=gpu:1     
-#SBATCH --array=0-82:1  ## start and end indices are included
+#SBATCH --gres=gpu:1
+#SBATCH --array=0-0:1  ## start and end indices are included
 
 
 #########################################
 ## configuration
 #########################################
-ARRAY=( {0000..0299..10} {0300..2400..40} )
-STEP=2500000
+STEP=500000
 INCR=$(echo "${STEP} / 5000" | bc)
-TEMP="${ARRAY[${SLURM_ARRAY_TASK_ID}]}"
-ISO1=-3.7e-21
-DMI1=2.6e-22
-ISO2=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-ISO3=$(awk -v x="$ISO1" 'BEGIN{print 0.1 * x}')
-DMI3=$(awk -v x="$DMI1" 'BEGIN{print 0.1 * x}')
-AISO=2.7e-23
+TEMP=0.0
+ISO1=0.0
+DMI1=1e-22
+ISO2=0.0
+DMI2=0.0
+ISO3=$(awk -v x="$ISO1" 'BEGIN{print -0 * x}')
+AISO=0.0
+DAMP=1.0
+## Gamma 5x
+ISD1="-1,-1,0"
+ISD2="-1,+1,0"
+ISD3="1,0,0"
+## Gamma 3x
+##ISD1="-1,+1,0"
+##ISD2="-1,-1,0"
+##ISD3="1,0,0"
+## coordinate axes
+##ISD1="1,0,0"
+##ISD2="0,1,0"
+##ISD3="0,0,1"
+## random
+##ISD1="random"
+##ISD2="random"
+##ISD3="random"
 
 
 ########################################
@@ -34,22 +50,22 @@ AISO=2.7e-23
 ########################################
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
-OUT="${SRC}../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${TEMP/\./}/"  ## path output directory
-CNFSRC="${SRC}conf/"
-CNFOUT="${OUT}conf/"
-VAMP="vampire-cuda"
+OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${DMI1/\./}/"  ## path output directory
+CNFSRC="${SRC}conf/ws/"  # source of configuration files
+CNFOUT="${OUT}conf/"  # destination of configuration files
+VAMP="vampire-cuda"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory
 EXCOUT="${OUT}${VAMP}"  ## Vampire executable in source directory
 VDC="${SRC}util/vdc/vdc"  ## Vampire to povray converter
 META="${OUT}meta/"  ## meta data 
-LOG="${OUT}proc.log"       ## logfile with std output
+LOG="${OUT}proc.log"  ## logfile with std output
 
 
 ########################################
 ## prepare input and output
 ########################################
 mkdir -p "$META" "$CNFOUT"
-cp ${BASH_SOURCE[0]} $OUT
+cp $EXCSRC ${BASH_SOURCE[0]} $OUT
 cp $EXCSRC $EXCOUT
 prepCnf $CNFSRC      \
         $CNFOUT      \
@@ -59,9 +75,13 @@ prepCnf $CNFSRC      \
         "ISO1=$ISO1" \
         "DMI1=$DMI1" \
         "ISO2=$ISO2" \
+        "DMI2=$DMI2" \
         "ISO3=$ISO3" \
-        "DMI3=$DMI3" \
-        "AISO=$AISO"
+        "AISO=$AISO" \
+        "DAMP=$DAMP" \
+        "ISD1=$ISD1" \
+        "ISD2=$ISD2" \
+        "ISD3=$ISD3"
 
 
 ########################################
@@ -73,13 +93,22 @@ srun --output="$LOG"                       \
      $EXCOUT --input-file "${CNFOUT}input" \
              --output-file "result"
 ## create povray file
-$VDC --povray --input-file "atoms-coords"
+$VDC --povray                    \
+     --input-file "atoms-coords" \
+     --vector-z 1,1,0            \
+     --slice 0,1,0,1,0,1
 ## render spin configuration
 NFRAME=$(find ${OUT} -name 'spins-*.inc' -printf '%f\n' |
          sed 's/spins-\([0-9]*\)\.inc/\1/' |
          sort -n |
          tail -1)  ## number of frames
-povray +KFI0 +KFF${NFRAME} -W2000 -H1500 +O${META}/conf-.png ${OUT}spins.pov -D
+povray -W2000              \ 
+       -H1500              \
+       -D                  \
+       +KFI0               \
+       +KFF${NFRAME}       \
+       +O${META}/conf-.png \
+       ${OUT}spins.pov 
 
 
 ########################################

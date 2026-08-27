@@ -2,29 +2,10 @@
 |              Vampire Data Converter for v5+                |
 |------------------------------------------------------------|
 Processing snapshot 00000000
-Processing snapshot 00000001
-Processing snapshot 00000002
-Processing snapshot 00000003
-Processing snapshot 00000004
-Processing snapshot 00000005
-/var/lib/slurm/slurmd/job58506/slurm_script: line 82: povray: command not found
-|------------------------------------------------------------|
-|              Vampire Data Converter for v5+                |
-|------------------------------------------------------------|
-Processing snapshot 00000000
-Processing snapshot 00000001
-Processing snapshot 00000002
-Processing snapshot 00000003
-Processing snapshot 00000004
-Processing snapshot 00000005
-/var/lib/slurm/slurmd/job58587/slurm_script: line 82: povray: command not found
-|------------------------------------------------------------|
-|              Vampire Data Converter for v5+                |
-|------------------------------------------------------------|
-Processing snapshot 00000000
-Processing snapshot 00000001
-Processing snapshot 00000002
-Processing snapshot 00000003
-Processing snapshot 00000004
-Processing snapshot 00000005
-/var/lib/slurm/slurmd/job58588/slurm_script: line 82: povray: command not found
+/var/lib/slurm/slurmd/job58996/slurm_script: line 99: 1582093 Segmentation fault      $VDC --povray --input-file "atoms-coords" --vector-z 1,1,0 --slice 0,1,0,1,0,1
+povray: cannot open the user configuration file /home/msaur/.povray/3.7/povray.conf: No such file or directory
+
+Problem with option setting
+povray -W2000  
+No input file provided
+/var/lib/slurm/slurmd/job58996/slurm_script: line 107: -H1500: command not found

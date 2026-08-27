@@ -1,0 +1,53 @@
+#------------------------------------------
+# Mn3Sn input file
+#------------------------------------------
+
+#------------------------------------------
+# Creation attributes:
+#------------------------------------------
+dimensions:system-size-x = 5.0 !nm
+dimensions:system-size-y = 5.0 !nm
+dimensions:system-size-z = 0.3 !nm
+
+material:unit-cell-file = ./conf/mn3sn.ucf
+
+create:periodic-boundaries = xyz
+create:spin-initialisation-random-seed = 0
+
+#------------------------------------------
+# Material Files:
+#------------------------------------------
+material:file = ./conf/mn3sn.mat
+
+#------------------------------------------
+# Simulation attributes:
+#------------------------------------------
+sim:temperature = <TEMP>
+sim:time-steps-increment = <INCR>
+sim:total-time-steps = <STEP>
+sim:time-step = 1 !fs
+
+#------------------------------------------
+# Program and integrator details
+#------------------------------------------
+sim:program = time-series
+#sim:program = curie-temperature
+sim:integrator = monte-carlo
+#montecarlo:algorithm = uniform
+#sim:integrator = llg-heun
+
+#------------------------------------------
+# data output
+#------------------------------------------
+#output:precision=15
+
+output:real-time
+output:electron-temperature
+output:phonon-temperature
+output:material-magnetisation
+output:magnetisation
+output:total-energy
+
+#screen:time-steps
+
+config:atoms
