@@ -5,14 +5,14 @@
 #------------------------------------------
 # Creation attributes:
 #------------------------------------------
-dimensions:system-size-x = 5.0 !nm
-dimensions:system-size-y = 5.0 !nm
-dimensions:system-size-z = 0.3 !nm
+dimensions:system-size-x = <SIZEX> !nm
+dimensions:system-size-y = <SIZEY> !nm
+dimensions:system-size-z = <SIZEZ> !nm
 
 material:unit-cell-file = ./conf/mn3sn.ucf
 
-create:periodic-boundaries = xyz
-create:spin-initialisation-random-seed = 0
+create:periodic-boundaries = xy
+create:spin-initialisation-random-seed = <SEED>
 
 #------------------------------------------
 # Material Files:
@@ -39,7 +39,7 @@ sim:integrator = monte-carlo
 #------------------------------------------
 # data output
 #------------------------------------------
-#output:precision=15
+output:precision=15
 
 output:real-time
 output:electron-temperature
