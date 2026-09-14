@@ -174,7 +174,6 @@ class tensor():
   crd_frac_prj = None  # fractional coordinates projected into center asymmetric unit cell
   dist_frac    = None  # fractional interaction distance
   sym          = None  # invers symmetry transformation relative to reference interaction
-  revers       = None  # direction of interaction relative to reference interaction
 
   def __init__( self, 
                 iid:int, 
@@ -225,18 +224,13 @@ class tensor():
     '''
     Symmetry transform exchange matrix.
     '''
-    if not isinstance(self.revers, bool):
-      raise ValueError('No exchange direction available!.')
-    elif not isinstance(self.sym, ndarray):
+    if not isinstance(self.sym, ndarray):
       raise ValueError('No transformation available!.')
     # transformed exchange matrix
     matrix_sym = self.mtrx
     for s in self.sym:
       matrix_sym = inv(s.mtrx_lab) @ matrix_sym @ s.mtrx_lab
-    if self.revers:
-      return matrix_sym.transpose()
-    else:
-      return matrix_sym
+    return matrix_sym
 
 
 
@@ -301,12 +295,9 @@ for s in sym:
   for e in exchange:
     if isinstance(e.sym, ndarray):
       continue
-    for i,c in enumerate([crd_frac_prj, crd_frac_prj[::-1]]):
-      dif_frac_prj = (e.crd_frac_prj - c) @ frac2lab.transpose()
-      if all(abs(dif_frac_prj.flatten()) < th * exch_radius):
-        e.sym = s
-        e.revers = (i == True)
-        break
+    dif_frac_prj = (e.crd_frac_prj - crd_frac_prj) @ frac2lab.transpose()
+    if all(abs(dif_frac_prj.flatten()) < th * exch_radius):
+      e.sym = s
 
 # check spacial symmetry
 for e in exchange:
@@ -325,6 +316,5 @@ for e in exchange:
     text = f'No exchange transformation found for {e.iid}!\n' \
            + 'Transformation matrices are:\n'
     for s in e.sym:
-      text = text + ' '.join(f'{j:> 8.2e}' for j in s.mtrx_lab.flatten()) + '.\n'
-    text = text + f'Inversion: {e.revers}.'
+      text = text + ' '.join(f'{j:> 8.2e}' for j in s.mtrx_lab.flatten()) + '.'
     raise ValueError(text)
