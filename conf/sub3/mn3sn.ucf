@@ -1,0 +1,85 @@
+# Unit cell size:
+# ucx ucy ucz
+# 1.0 1.73205 0.767195
+5.67 9.82073 4.53
+# Unit cell lattice vectors:
+# ucvxx ucvxy ucvxz
+# ucvyx ucvyy ucvyz
+# ucvzx ucvzy ucvzz
+1 0 0
+0 1 0
+0 0 1
+# Atoms
+# num_atoms_in_unit_cell number_of_materials
+# atom_id cx cy cz [mat_id cat_id hcat_id]
+6 3
+ 0 0.0  0.0  0.0 0 0 0
+ 1 0.5  0.0  0.0 1 1 1
+ 2 0.25 0.25 0.0 2 2 2
+ 3 0.5  0.5  0.0 0 0 0
+ 4 0.0  0.5  0.0 1 1 1
+ 5 0.75 0.75 0.0 2 2 2
+# Interactions
+# num_interactions [exchange_type]
+# IID i j dx dy dz Jxx Jxy Jxz Jyx Jyy Jyz Jzx Jzy Jzz
+60 tensorial
+ 0 0 1  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 1 1 0  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 2 2 0  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 3 0 2  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 4 1 2  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 5 2 1  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 6 3 4  1  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 7 4 3 -1  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 8 5 3  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+ 9 3 5  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+10 4 5 -1  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+11 5 4  1  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+12 0 1 -1  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+13 1 0  1  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+15 5 0  1  1 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+14 0 5 -1 -1 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+16 1 5  0 -1 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+17 5 1  0  1 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+18 2 3  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+19 3 2  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+20 4 2  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+21 2 4  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+22 3 4  0  0 0 <ISO1> <DMI1N> 0.0 <DMI1T> <ISO1> 0.0 0.0 0.0 <ISO1>
+23 4 3  0  0 0 <ISO1> <DMI1T> 0.0 <DMI1N> <ISO1> 0.0 0.0 0.0 <ISO1>
+24 0 0 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+25 0 0 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+26 1 1 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+27 1 1 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+28 2 2 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+29 2 2 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+30 3 3 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+31 3 3 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+32 4 4 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+33 4 4 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+34 5 5 0 0  1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+35 5 5 0 0 -1 <ISO2> 0.0 0.0 0.0 <ISO2> 0.0 0.0 0.0 <ISO2>
+36 0 2 -1  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+37 5 0  0  1 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+38 4 0  0  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3> 
+39 0 4  0 -1 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+40 5 1  1  1 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+41 3 1  0  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+42 1 3  0 -1 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+43 2 3 -1  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+44 2 4  1  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+45 3 5 -1  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+46 4 5  0  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+47 1 2  1  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+48 2 0  1  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+49 0 5  0 -1 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+50 0 4  0  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+51 4 0  0  1 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+52 2 1 -1  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+53 1 5 -1 -1 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+54 1 3  0  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+55 3 1  0  1 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+56 3 2  1  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
+57 4 2 -1  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+58 5 3  1  0 0 <ISO3> <DMI3T> 0.0 <DMI3N> <ISO3> 0.0 0.0 0.0 <ISO3>
+59 5 4  0  0 0 <ISO3> <DMI3N> 0.0 <DMI3T> <ISO3> 0.0 0.0 0.0 <ISO3>
