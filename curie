@@ -22,7 +22,7 @@ INTEG="monte-carlo"
 SIZEX=5.0
 SIZEY=5.0
 SIZEZ=5.0
-STEP=20000
+STEP=10000
 INCR=$(echo "${STEP} / 5000" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=0.0
@@ -109,7 +109,7 @@ DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
 OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${SLURM_ARRAY_TASK_ID}/"  ## path output directory
-CNFSRC="${SRC}conf/sub6/"  # source of configuration files
+CNFSRC="${SRC}conf/curie/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
 VAMP="vampire-cuda"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory

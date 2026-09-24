@@ -24,16 +24,16 @@ material:file = ./conf/mn3sn.mat
 #------------------------------------------
 sim:temperature = <TEMP>
 sim:time-steps-increment = <INCR>
-sim:temperature-increment = 10
-sim:maximum-temperature = 500
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
+sim:constraint-angle-theta = <THETA>
+sim:constraint-angle-phi   = <PHI>
 
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
 sim:program = time-series
-sim:integrator = <INTEG>
+sim:integrator = hybrid-constrained-monte-carlo
 #montecarlo:algorithm = uniform
 
 #------------------------------------------
@@ -47,6 +47,8 @@ output:phonon-temperature
 output:material-magnetisation
 output:magnetisation
 output:total-energy
+output:constraint-theta
+output:constraint-phi
 
 #screen:time-steps
 

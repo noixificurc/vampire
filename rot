@@ -10,22 +10,33 @@
 ##SBATCH --exclude=r2,r3,r4,r5
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
-#SBATCH --gres=gpu:1
-#SBATCH --array=0-0:1  ## start and end indices are included
+#SBATCH --gres=gpu:0
+#SBATCH --array=0-174:1  ## start and end indices are included
+ARRAY=()
+ARRAY1=()
+ARRAY2=()
+for x in {00..90..15}; do
+  for y in {000..360..15}; do
+    ARRAY+=("$x-$y")
+    ARRAY1+=($x)
+    ARRAY2+=($y)
+  done
+done
+echo ${#ARRAY[@]}
 
 
 #########################################
 ## configuration
 #########################################
-INTEG="llg-heun"
-INTEG="monte-carlo"
 SIZEX=5.0
 SIZEY=5.0
 SIZEZ=5.0
-STEP=20000
+STEP=10000
 INCR=$(echo "${STEP} / 5000" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=0.0
+THETA=${ARRAY1[$SLURM_ARRAY_TASK_ID]}
+PHI=${ARRAY2[$SLURM_ARRAY_TASK_ID]}
 ISO1=-7.5e-21
 DMI1=8.8e-23
 ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
@@ -108,10 +119,10 @@ DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 ########################################
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
-OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${SLURM_ARRAY_TASK_ID}/"  ## path output directory
-CNFSRC="${SRC}conf/sub6/"  # source of configuration files
+OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${ARRAY[$SLURM_ARRAY_TASK_ID]}/"  ## path output directory
+CNFSRC="${SRC}conf/rot/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
-VAMP="vampire-cuda"  # Vampire file base name
+VAMP="vampire-serial"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory
 EXCOUT="${OUT}${VAMP}"  ## Vampire executable in source directory
 VDC="${SRC}util/vdc/vdc"  ## Vampire to povray converter
@@ -127,7 +138,6 @@ cp $EXCSRC ${BASH_SOURCE[0]} $OUT
 cp $EXCSRC $EXCOUT
 prepCnf $CNFSRC            \
         $CNFOUT            \
-        "INTEG=$INTEG"     \
         "SIZEX=$SIZEX"     \
         "SIZEY=$SIZEY"     \
         "SIZEZ=$SIZEZ"     \
@@ -135,6 +145,8 @@ prepCnf $CNFSRC            \
         "INCR=$INCR"       \
         "SEED=$SEED"       \
         "TEMP=$TEMP"       \
+        "THETA=$THETA"     \
+        "PHI=$PHI"         \
         "S1UDEFN=$S1UDEFN" \
         "S1U120N=$S1U120N" \
         "S1U240N=$S1U240N" \

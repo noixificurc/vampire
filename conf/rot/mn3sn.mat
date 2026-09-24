@@ -1,0 +1,48 @@
+#===================================================
+# Mn3Sn material file
+#===================================================
+
+#---------------------------------------------------
+# Number of Materials
+#---------------------------------------------------
+material:num-materials=3
+
+#---------------------------------------------------
+# Material 1 Mn
+#---------------------------------------------------
+material[1]:material-name=Mn
+material[1]:material-element = C
+material[1]:unit-cell-category = 1
+material[1]:damping-constant = <DAMP>
+material[1]:atomic-spin-moment = 3.0 !muB
+material[1]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[1]:uniaxial-anisotropy-direction = -0.5,0.8660254,0
+material[1]:minimum-height = 0.0
+material[1]:maximum-height = 1.0
+material[1]:initial-spin-direction = <ISD1>
+#---------------------------------------------------
+# Material 2 Mn
+#---------------------------------------------------
+material[2]:material-name=Mn
+material[2]:material-element = O
+material[2]:unit-cell-category = 2
+material[2]:damping-constant = <DAMP>
+material[2]:atomic-spin-moment = 3.0 !muB
+material[2]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[2]:uniaxial-anisotropy-direction = -0.5,-0.8660254,0
+material[2]:minimum-height = 0.0
+material[2]:maximum-height = 1.0
+material[2]:initial-spin-direction = <ISD2>
+#---------------------------------------------------
+# Material 3 Mn
+#---------------------------------------------------
+material[3]:material-name=Mn
+material[3]:material-element = N
+material[3]:unit-cell-category = 3
+material[3]:damping-constant = <DAMP>
+material[3]:atomic-spin-moment = 3.0 !muB
+material[3]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[3]:uniaxial-anisotropy-direction = 1,0,0
+material[3]:minimum-height = 0.0 
+material[3]:maximum-height = 1.0
+material[3]:initial-spin-direction = <ISD3>

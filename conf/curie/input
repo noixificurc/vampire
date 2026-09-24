@@ -24,15 +24,15 @@ material:file = ./conf/mn3sn.mat
 #------------------------------------------
 sim:temperature = <TEMP>
 sim:time-steps-increment = <INCR>
-sim:temperature-increment = 10
-sim:maximum-temperature = 500
+sim:temperature-increment = 40
+sim:maximum-temperature = 1200
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
 
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = time-series
+sim:program = curie-temperature
 sim:integrator = <INTEG>
 #montecarlo:algorithm = uniform
 
@@ -41,9 +41,7 @@ sim:integrator = <INTEG>
 #------------------------------------------
 output:precision=15
 
-output:real-time
 output:electron-temperature
-output:phonon-temperature
 output:material-magnetisation
 output:magnetisation
 output:total-energy
