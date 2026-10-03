@@ -26,8 +26,6 @@ sim:temperature = <TEMP>
 sim:time-steps-increment = <INCR>
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
-sim:constraint-angle-theta = <THETA>
-sim:constraint-angle-phi   = <PHI>
 
 #------------------------------------------
 # Program and integrator details

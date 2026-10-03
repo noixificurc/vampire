@@ -24,8 +24,6 @@ material:file = ./conf/mn3sn.mat
 #------------------------------------------
 sim:temperature = <TEMP>
 sim:time-steps-increment = <INCR>
-sim:temperature-increment = 10
-sim:maximum-temperature = 500
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
 

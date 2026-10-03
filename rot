@@ -189,7 +189,7 @@ NFRAME=$(find ${OUT} -name 'spins-*.inc' -printf '%f\n' |
          sed 's/spins-\([0-9]*\)\.inc/\1/' |
          sort -n |
          tail -1)  ## number of frames
-povray -W2000              \ 
+povray -W2000              \
        -H1500              \
        -D                  \
        +KFI0               \

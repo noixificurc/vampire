@@ -1,42 +1,28 @@
 #!/bin/bash
 
 #########################################
-## slurm
-#########################################
-#SBATCH --job-name=mn3sn
-#SBATCH --output=./proc.log
-#SBATCH --partition=all  
-##SBATCH --nodelist=r3 
-##SBATCH --exclude=r2,r3,r4,r5
-#SBATCH --ntasks=1       
-#SBATCH --cpus-per-task=1
-#SBATCH --gres=gpu:1
-#SBATCH --array=0-0:1  ## start and end indices are included
-
-
-#########################################
 ## configuration
 #########################################
 INTEG="llg-heun"
 INTEG="monte-carlo"
 SIZEX=5.0
 SIZEY=5.0
-SIZEZ=5.0
-STEP=20000
+SIZEZ=0.3
+STEP=60000
 INCR=$(echo "${STEP} / 5000" | bc)
-SEED=$SLURM_ARRAY_TASK_ID
+SEED=1
 TEMP=0.0
-ISO1=0.0
-DMI1=8.8e-23
+ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * -2 * 23}')
+DMI1=$(awk 'BEGIN{print 1.602176634 * 10^-22 *  2 * 1.6}')
 ISO2=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-ISO3=$(awk -v x="$ISO1" 'BEGIN{print  1 * x}')
-DMI3=$(awk -v x="$DMI1" 'BEGIN{print  1 * x}')
-AISO=0.0
+ISO3=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
+DMI3=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
+AISO=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 0.17}')
 DAMP=1.0
 ## Gamma 5x
-ISD1="-1,-1,0"
-ISD2="-1,+1,0"
-ISD3=" 1, 0,0"
+##ISD1="-1,-1,0"
+##ISD2="-1,+1,0"
+##ISD3=" 1, 0,0"
 ## Gamma 3x
 ##ISD1="-1,+1,0"
 ##ISD2="-1,-1,0"
@@ -46,18 +32,18 @@ ISD3=" 1, 0,0"
 ##ISD2="0,1,0"
 ##ISD3="0,0,1"
 ## random
-##ISD1="random"
-##ISD2="random"
-##ISD3="random"
+ISD1="random"
+ISD2="random"
+ISD3="random"
 ## edit
 ##ISD1=" 0.684136,  0.729355,  0.000118024"
 ##ISD2=" 0.289574, -0.957156,  0.000119789"
 ##ISD3="-0.973708,  0.227798, -0.000231876"
 
 # 2nd shell
-DMI1N=$(awk -v x="$DMI1" 'BEGIN{print -1 * x}')
+DMI1N=$(awk -v x="$DMI1"  'BEGIN{print -1 * x}')
 DMI1T=$(awk -v x="$DMI1N" 'BEGIN{print -1 * x}')
-DMI3N=$(awk -v x="$DMI3" 'BEGIN{print -1 * x}')
+DMI3N=$(awk -v x="$DMI3"  'BEGIN{print -1 * x}')
 DMI3T=$(awk -v x="$DMI3N" 'BEGIN{print -1 * x}')
 
 
@@ -67,10 +53,10 @@ DMI3T=$(awk -v x="$DMI3N" 'BEGIN{print -1 * x}')
 ########################################
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
-OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${SLURM_ARRAY_TASK_ID}/"  ## path output directory
+OUT="${SRC}../data/${DATE}-/"  ## path output directory
 CNFSRC="${SRC}conf/sub3/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
-VAMP="vampire-cuda"  # Vampire file base name
+VAMP="vampire-parallel"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory
 EXCOUT="${OUT}${VAMP}"  ## Vampire executable in source directory
 VDC="${SRC}util/vdc/vdc"  ## Vampire to povray converter
@@ -94,7 +80,7 @@ prepCnf $CNFSRC        \
         "INCR=$INCR"   \
         "SEED=$SEED"   \
         "TEMP=$TEMP"   \
-        "ISO1=$ISO2"   \
+        "ISO1=$ISO1"   \
         "DMI1N=$DMI1N" \
         "DMI1T=$DMI1T" \
         "ISO2=$ISO2"   \
@@ -113,9 +99,9 @@ prepCnf $CNFSRC        \
 ########################################
 cd $OUT
 ## run simulation
-srun --output="$LOG"                       \
-     $EXCOUT --input-file "${CNFOUT}input" \
-             --output-file "result"
+mpirun -n 6                                  \
+       $EXCOUT --input-file "${CNFOUT}input" \
+               --output-file "result"
 ## create povray file
 $VDC --povray                    \
      --input-file "atoms-coords" \
@@ -133,7 +119,7 @@ povray -W2000              \
        +KFI0               \
        +KFF${NFRAME}       \
        +O${META}/conf-.png \
-       ${OUT}spins.pov 
+       ${OUT}spins.pov
 
 
 ########################################
