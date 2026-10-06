@@ -25,7 +25,7 @@ from re import match
 # configuration
 #
 #-----------------
-p2ucf = './ucf/mn3sn.ucf'  # path to unit cell file
+p2ucf = './ucf/kagome.ucf'  # path to unit cell file
 th    = 1e-10  # relative threshold
 
 
@@ -58,6 +58,7 @@ origin_conv = origin_ucf + array([-0.25, -1/12, 0])  # conventional unit cell
 origin_btm  = -origin_conv                           # center of bottom layer
 origin_top  = origin_btm + array([0,0,0.5])          # center of bottom layer
 origin_inv  = origin_btm + array([0,0,0.25])         # center symmetric unit cell
+origin_sn   = origin_btm + array([0.75,0.25,0])      # Sn atom
 
 
 
@@ -103,8 +104,10 @@ gen3 = array([ symmetry(origin_inv, identity),
                symmetry(origin_inv, inversion),
                symmetry(origin_inv, sigmax),
                symmetry(origin_inv, c3z) ])
-gen4 = array([ symmetry(origin_ucf, identity),
-               symmetry(origin_ucf, inversion) ])
+#gen4 = array([ symmetry(origin_sn, identity),
+#               symmetry(origin_sn, sigmaz),
+#               symmetry(origin_sn, sigmax),
+#               symmetry(origin_sn, c3z) ])
 
 def group_generator(gen:ndarray):
   '''
@@ -244,6 +247,8 @@ class tensor():
 ucf = []  # unit cell file content
 with open(p2ucf, 'r') as f:
     for l in f.readlines():
+      if l.isspace():
+        continue
       if l.strip()[0] != '#':
         ucf.append(l.strip())
 ucf = array(ucf)
@@ -258,10 +263,14 @@ idx_sec_atom    = None  # start of atom section
 idx_sec_intrctn = None  # start of interaction section
 # determine line numbers
 for i,l in enumerate(ucf):
-  if l == '12 3':
+  if l == '12 3' or l == '6 3':
     idx_sec_atom = i
   elif match(r"^\d+\s+tensorial$", l.strip()):
     idx_sec_intrctn =i
+if not isinstance(idx_sec_atom,int):
+  raise ValueError('Could not find atom section!')
+elif not isinstance(idx_sec_intrctn,int):
+  raise ValueError('Could not find interaction section!')
 # content of atom section
 sec_atom = array([ a.split() for a in ucf[idx_sec_atom + 1:idx_sec_intrctn] ])
 # lattice sites
