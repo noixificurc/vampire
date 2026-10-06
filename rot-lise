@@ -6,8 +6,8 @@ sim1() (
   ARRAY=()
   ARRAY1=()
   ARRAY2=()
-  for x in {00..90..15}; do
-    for y in {000..360..15}; do
+  for x in {00..180..15}; do
+    for y in {000..359..15}; do
       ARRAY+=("$x-$y")
       ARRAY1+=($x)
       ARRAY2+=($y)
@@ -21,7 +21,7 @@ sim1() (
   SIZEX=3.0
   SIZEY=3.0
   SIZEZ=3.0
-  STEP=20000
+  STEP=30000
   INCR=$(echo "${STEP} / 5000" | bc)
   SEED=$SLURM_ARRAY_TASK_ID
   TEMP=0.0
@@ -32,7 +32,7 @@ sim1() (
   ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
   DMI2=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
   ISO3=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-  DMI1=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 0.0265}')
+  AISO=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 0.02650}')
   DAMP=1.0
   ## Gamma 5x
   ##ISD1="-1,-1,0"
@@ -46,10 +46,14 @@ sim1() (
   ##ISD1="1,0,0"
   ##ISD2="0,1,0"
   ##ISD3="0,0,1"
+  ## different
+  ISD1="0.8165,−0.4082,−0.4082"
+  ISD2="−0.4082,−0.4082,0.8165"
+  ISD3="−0.4082,0.8165,−0.4082"
   ## random
-  ISD1="random"
-  ISD2="random"
-  ISD3="random"
+  ##ISD1="random"
+  ##ISD2="random"
+  ##ISD3="random"
   ## edit
   ##ISD1=" 0.684136,  0.729355,  0.000118024"
   ##ISD2=" 0.289574, -0.957156,  0.000119789"
@@ -194,10 +198,9 @@ sim1() (
 
 
 
-#for i in {0..174}; do 
 DATESHORT="$(date +'%y%m%d-%H%M%S')"  ## date
 NCPU=6
-for i in {0..174..1}; do 
+for i in {0..311..1}; do 
   sim1 $DATESHORT $i &
   while (( $(jobs -rp | wc -l) >= NCPU )); do
     wait -n

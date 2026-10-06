@@ -11,7 +11,7 @@ dimensions:system-size-z = <SIZEZ> !nm
 
 material:unit-cell-file = ./conf/mn3sn.ucf
 
-create:periodic-boundaries = xy
+create:periodic-boundaries = xyz
 create:spin-initialisation-random-seed = <SEED>
 
 #------------------------------------------
@@ -45,8 +45,8 @@ output:phonon-temperature
 output:material-magnetisation
 output:magnetisation
 output:total-energy
-output:constraint-theta
-output:constraint-phi
+output:material-constraint-phi
+output:material-constraint-theta
 
 #screen:time-steps
 
