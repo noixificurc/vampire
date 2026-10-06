@@ -23,11 +23,13 @@ material:file = ./conf/mn3sn.mat
 # Simulation attributes:
 #------------------------------------------
 sim:temperature = <TEMP>
+
 sim:time-steps-increment = <INCR>
-sim:temperature-increment = 10
-sim:maximum-temperature = 500
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
+
+sim:applied-field-strength = 0 !T
+sim:applied-field-unit-vector = 0,1,0
 
 #------------------------------------------
 # Program and integrator details
@@ -47,6 +49,8 @@ output:phonon-temperature
 output:material-magnetisation
 output:magnetisation
 output:total-energy
+#output:applied-field-strength
+#output:applied-field-unit-vector
 
 #screen:time-steps
 
