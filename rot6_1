@@ -11,43 +11,43 @@
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:0
-#SBATCH --array=0-174:1  ## start and end indices are included
+#SBATCH --array=0-311:1  ## start and end indices are included
+
 ARRAY=()
 ARRAY1=()
 ARRAY2=()
-for x in {00..90..15}; do
-  for y in {000..360..15}; do
+for x in {00..180..15}; do
+  for y in {000..359..15}; do
     ARRAY+=("$x-$y")
     ARRAY1+=($x)
     ARRAY2+=($y)
   done
 done
-echo ${#ARRAY[@]}
 
 
 #########################################
 ## configuration
 #########################################
-SIZEX=5.0
-SIZEY=5.0
-SIZEZ=5.0
-STEP=10000
+SIZEX=3.0
+SIZEY=3.0
+SIZEZ=3.0
+STEP=10000000
 INCR=$(echo "${STEP} / 5000" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=0.0
 THETA=${ARRAY1[$SLURM_ARRAY_TASK_ID]}
 PHI=${ARRAY2[$SLURM_ARRAY_TASK_ID]}
-ISO1=-7.5e-21
-DMI1=8.8e-23
+ISO1=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 2 * -23.4}')
+DMI1=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 2 / 0.66275822 * 0.269}')
 ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
 DMI2=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
 ISO3=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-AISO=0.0
+AISO=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 0.02650}')
 DAMP=1.0
 ## Gamma 5x
-ISD1="-1,-1,0"
-ISD2="-1,+1,0"
-ISD3=" 1, 0,0"
+##ISD1="-1,-1,0"
+##ISD2="-1,+1,0"
+##ISD3=" 1, 0,0"
 ## Gamma 3x
 ##ISD1="-1,+1,0"
 ##ISD2="-1,-1,0"
@@ -56,6 +56,10 @@ ISD3=" 1, 0,0"
 ##ISD1="1,0,0"
 ##ISD2="0,1,0"
 ##ISD3="0,0,1"
+## different
+ISD1="0.8165,−0.4082,−0.4082"
+ISD2="−0.4082,−0.4082,0.8165"
+ISD3="−0.4082,0.8165,−0.4082"
 ## random
 ##ISD1="random"
 ##ISD2="random"
@@ -111,7 +115,6 @@ S1D240T=$(gen_s1 -m -t 240)
 # 2nd shell
 DMI2N=$(awk -v x="$DMI2" 'BEGIN{print -1 * x}')
 DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
-
 
 
 ########################################
@@ -175,9 +178,8 @@ prepCnf $CNFSRC            \
 ########################################
 cd $OUT
 ## run simulation
-srun --output="$LOG"                       \
-     $EXCOUT --input-file "${CNFOUT}input" \
-             --output-file "result"
+$EXCOUT --input-file "${CNFOUT}input" \
+       --output-file "result"
 ## create povray file
 $VDC --povray                    \
      --input-file "atoms-coords" \

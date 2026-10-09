@@ -11,7 +11,7 @@ dimensions:system-size-z = <SIZEZ> !nm
 
 material:unit-cell-file = ./conf/mn3sn.ucf
 
-create:periodic-boundaries = xy
+create:periodic-boundaries = xyz
 create:spin-initialisation-random-seed = <SEED>
 
 #------------------------------------------
@@ -24,16 +24,14 @@ material:file = ./conf/mn3sn.mat
 #------------------------------------------
 sim:temperature = <TEMP>
 sim:time-steps-increment = <INCR>
-sim:temperature-increment = 50
-sim:maximum-temperature = 1400
 sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
 
 #------------------------------------------
 # Program and integrator details
 #------------------------------------------
-sim:program = curie-temperature
-sim:integrator = <INTEG>
+sim:program = time-series
+sim:integrator = hybrid-constrained-monte-carlo
 #montecarlo:algorithm = uniform
 
 #------------------------------------------
@@ -41,10 +39,14 @@ sim:integrator = <INTEG>
 #------------------------------------------
 output:precision=15
 
+output:real-time
 output:electron-temperature
+output:phonon-temperature
 output:material-magnetisation
 output:magnetisation
 output:total-energy
+output:material-constraint-phi
+output:material-constraint-theta
 
 #screen:time-steps
 
