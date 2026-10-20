@@ -11,13 +11,13 @@
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:0
-#SBATCH --array=0-311:1  ## start and end indices are included
+#SBATCH --array=0-36:1  ## start and end indices are included
 
 ARRAY=()
 ARRAY1=()
 ARRAY2=()
-for x in {00..180..15}; do
-  for y in {000..359..15}; do
+for x in {000..180..5}; do
+  for y in {000..000}; do
     ARRAY+=("$x-$y")
     ARRAY1+=($x)
     ARRAY2+=($y)
@@ -28,26 +28,28 @@ done
 #########################################
 ## configuration
 #########################################
-SIZEX=3.0
-SIZEY=3.0
-SIZEZ=3.0
-STEP=10000000
-INCR=$(echo "${STEP} / 5000" | bc)
+SIZEX=10.0
+SIZEY=10.0
+SIZEZ=10.0
+STEP=5000000
+STEP=50000000
+INCR=$(echo "${STEP} / 200" | bc)
+RATE=$(echo "${STEP} / ${INCR} / 4" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=0.0
 THETA=${ARRAY1[$SLURM_ARRAY_TASK_ID]}
 PHI=${ARRAY2[$SLURM_ARRAY_TASK_ID]}
-ISO1=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 2 * -23.4}')
-DMI1=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 2 / 0.66275822 * 0.269}')
+ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * -18.7}')
+DMI1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 0.5}')
 ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
 DMI2=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
 ISO3=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-AISO=$(awk -v x="$ISO1" 'BEGIN{print 1.602176634 * 10^-22 * 0.02650}')
+AISO=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 0.0}')
 DAMP=1.0
 ## Gamma 5x
-##ISD1="-1,-1,0"
-##ISD2="-1,+1,0"
-##ISD3=" 1, 0,0"
+ISD1="-1,-1,0"
+ISD2="-1,+1,0"
+ISD3=" 1, 0,0"
 ## Gamma 3x
 ##ISD1="-1,+1,0"
 ##ISD2="-1,-1,0"
@@ -57,23 +59,30 @@ DAMP=1.0
 ##ISD2="0,1,0"
 ##ISD3="0,0,1"
 ## different
-ISD1="0.8165,−0.4082,−0.4082"
-ISD2="−0.4082,−0.4082,0.8165"
-ISD3="−0.4082,0.8165,−0.4082"
+##ISD1="0.8165,−0.4082,−0.4082"
+##ISD2="−0.4082,−0.4082,0.8165"
+##ISD3="−0.4082,0.8165,−0.4082"
 ## random
 ##ISD1="random"
 ##ISD2="random"
 ##ISD3="random"
 ## edit
-##ISD1=" 0.684136,  0.729355,  0.000118024"
-##ISD2=" 0.289574, -0.957156,  0.000119789"
-##ISD3="-0.973708,  0.227798, -0.000231876"
+#rot3d() {
+#  awk -F, -v p="$PHI" -v t="$THETA" 'BEGIN{pi=atan2(0,-1)}
+#  { x=$1+0; y=$2+0
+#    az = atan2(y,x) + p*pi/180      # original in-plane direction + phi
+#    th = t*pi/180
+#    printf "%.6f,%.6f,%.6f\n", sin(th)*cos(az), sin(th)*sin(az), cos(th) }' <<< "$1"
+#}
+#ISD1=$(rot3d "-1,-1,0")
+#ISD2=$(rot3d "-1,+1,0")
+#ISD3=$(rot3d " 1, 0,0")
 
 
 ## 1st shell
-DMI1X=$(awk -v dmi="$DMI1" 'BEGIN{print dmi *  0}')
-DMI1Y=$(awk -v dmi="$DMI1" 'BEGIN{print dmi * -0.74883345}')
-DMI1Z=$(awk -v dmi="$DMI1" 'BEGIN{print dmi *  0.66275822}')
+DMI1X=$(awk -v dmi="$DMI1" 'BEGIN{print dmi * 0}')
+DMI1Y=$(awk -v dmi="$DMI1" 'BEGIN{print dmi * 0}')
+DMI1Z=$(awk -v dmi="$DMI1" 'BEGIN{print dmi * 1}')
 gen_s1() {
   local trnsp=-1
   local sigma=1
@@ -123,7 +132,7 @@ DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
 OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${ARRAY[$SLURM_ARRAY_TASK_ID]}/"  ## path output directory
-CNFSRC="${SRC}conf/rot/"  # source of configuration files
+CNFSRC="${SRC}conf/sub6/constrained/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
 VAMP="vampire-serial"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory
@@ -146,6 +155,7 @@ prepCnf $CNFSRC            \
         "SIZEZ=$SIZEZ"     \
         "STEP=$STEP"       \
         "INCR=$INCR"       \
+        "RATE=$RATE"       \
         "SEED=$SEED"       \
         "TEMP=$TEMP"       \
         "THETA=$THETA"     \

@@ -28,6 +28,12 @@ sim:total-time-steps = <STEP>
 sim:time-step = 1 !fs
 
 #------------------------------------------
+# configuration
+#------------------------------------------
+config:atoms
+config:atoms-output-rate = <RATE>
+
+#------------------------------------------
 # Program and integrator details
 #------------------------------------------
 sim:program = time-series
@@ -38,6 +44,7 @@ sim:integrator = hybrid-constrained-monte-carlo
 # data output
 #------------------------------------------
 output:precision=15
+output:column-headers
 
 output:real-time
 output:electron-temperature
@@ -47,7 +54,6 @@ output:magnetisation
 output:total-energy
 output:material-constraint-phi
 output:material-constraint-theta
+output:material-torque
 
 #screen:time-steps
-
-config:atoms

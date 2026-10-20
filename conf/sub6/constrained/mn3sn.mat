@@ -5,7 +5,7 @@
 #---------------------------------------------------
 # Number of Materials
 #---------------------------------------------------
-material:num-materials=3
+material:num-materials=6
 
 #---------------------------------------------------
 # Material 1 Mn
@@ -52,6 +52,54 @@ material[3]:uniaxial-anisotropy-direction = 1,0,0
 material[3]:minimum-height = 0.0 
 material[3]:maximum-height = 1.0
 material[3]:initial-spin-direction = <ISD3>
-material[3]:constrained = true
-material[3]:constraint-angle-theta = <PHI>
-material[3]:constraint-angle-phi = <THETA>
+#material[3]:constrained = true
+#material[3]:constraint-angle-theta = <PHI>
+#material[3]:constraint-angle-phi = <THETA>
+#---------------------------------------------------
+# Material 4 Mn
+#---------------------------------------------------
+material[4]:material-name=Mn
+material[4]:material-element = S
+material[4]:unit-cell-category = 4
+material[4]:damping-constant = <DAMP>
+material[4]:atomic-spin-moment = 3.0 !muB
+material[4]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[4]:uniaxial-anisotropy-direction = -0.5,0.8660254,0
+material[4]:minimum-height = 0.0
+material[4]:maximum-height = 1.0
+material[4]:initial-spin-direction = <ISD1>
+#material[4]:constrained = false
+#material[4]:constraint-angle-theta = <PHI>
+#material[4]:constraint-angle-phi = <THETA>
+#---------------------------------------------------
+# Material 5 Mn
+#---------------------------------------------------
+material[5]:material-name=Mn
+material[5]:material-element = H
+material[5]:unit-cell-category = 5
+material[5]:damping-constant = <DAMP>
+material[5]:atomic-spin-moment = 3.0 !muB
+material[5]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[5]:uniaxial-anisotropy-direction = -0.5,-0.8660254,0
+material[5]:minimum-height = 0.0
+material[5]:maximum-height = 1.0
+material[5]:initial-spin-direction = <ISD2>
+#material[5]:constrained = false
+#material[5]:constraint-angle-theta = <PHI>
+#material[5]:constraint-angle-phi = <THETA>
+#---------------------------------------------------
+# Material 6 Mn
+#---------------------------------------------------
+material[6]:material-name=Mn
+material[6]:material-element = W
+material[6]:unit-cell-category = 6
+material[6]:damping-constant = <DAMP>
+material[6]:atomic-spin-moment = 3.0 !muB
+material[6]:second-order-uniaxial-anisotropy-constant = <AISO>
+material[6]:uniaxial-anisotropy-direction = 1,0,0
+material[6]:minimum-height = 0.0 
+material[6]:maximum-height = 1.0
+material[6]:initial-spin-direction = <ISD3>
+material[6]:constrained = true
+material[6]:constraint-angle-theta = <PHI>
+material[6]:constraint-angle-phi = <THETA>

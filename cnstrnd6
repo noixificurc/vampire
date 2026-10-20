@@ -7,7 +7,7 @@
 #SBATCH --output=./proc.log
 #SBATCH --partition=all  
 ##SBATCH --nodelist=r3 
-#SBATCH --exclude=r1
+##SBATCH --exclude=r2,r3,r4,r5
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:0
@@ -16,7 +16,7 @@
 ARRAY=()
 ARRAY1=()
 ARRAY2=()
-for x in {90..90}; do
+for x in {090..090}; do
   for y in {000..359..5}; do
     ARRAY+=("$x-$y")
     ARRAY1+=($x)
@@ -31,18 +31,19 @@ done
 SIZEX=5.0
 SIZEY=5.0
 SIZEZ=5.0
-STEP=100000 
-INCR=$(echo "${STEP} / 5000" | bc)
+STEP=500000
+INCR=$(echo "${STEP} / 200" | bc)
+RATE=$(echo "${STEP} / ${INCR} / 4" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=0.0
 THETA=${ARRAY1[$SLURM_ARRAY_TASK_ID]}
 PHI=${ARRAY2[$SLURM_ARRAY_TASK_ID]}
-ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 2 * -23}')
-DMI1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 2 *  1.6}')
-ISO2=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
-ISO3=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
-DMI3=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
-AISO=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 17}')
+ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * -18.7}')
+DMI1=$(awk 'BEGIN{print 1.602176634 * 10^-22 / 0.66275822 * 0.02}')
+ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
+DMI2=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
+ISO3=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
+AISO=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 0.14}')
 DAMP=1.0
 ## Gamma 5x
 ##ISD1="-1,-1,0"
@@ -76,13 +77,52 @@ ISD1=$(rot3d "-1,-1,0")
 ISD2=$(rot3d "-1,+1,0")
 ISD3=$(rot3d " 1, 0,0")
 
-# 1st shell
-DMI1N=$(awk -v x="$DMI1"  'BEGIN{print -1 * x}')
-DMI1T=$(awk -v x="$DMI1N" 'BEGIN{print -1 * x}')
-# 3rd shell
-DMI3N=$(awk -v x="$DMI3"  'BEGIN{print -1 * x}')
-DMI3T=$(awk -v x="$DMI3N" 'BEGIN{print -1 * x}')
 
+## 1st shell
+DMI1X=$(awk -v dmi="$DMI1" 'BEGIN{print dmi *  0}')
+DMI1Y=$(awk -v dmi="$DMI1" 'BEGIN{print dmi * -0.74883345}')
+DMI1Z=$(awk -v dmi="$DMI1" 'BEGIN{print dmi *  0.66275822}')
+gen_s1() {
+  local trnsp=-1
+  local sigma=1
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+     -t|-m)
+         [[ $1 == -t ]] && trnsp=1 || sigma=-1
+         shift
+         ;;
+     *)
+         break
+         ;;
+    esac
+  done
+  awk -v phi="$1" -v t="$trnsp" -v s="$sigma" -v iso="$ISO1" -v dx="$DMI1X" -v dy="$DMI1Y" -v dz="$DMI1Z" '
+  BEGIN {
+    rad = phi * atan2(0, -1) / 180.0
+    dxr = t * s * (dx * cos(rad) - dy * sin(rad))
+    dyr = t * s * (dx * sin(rad) + dy * cos(rad))
+    dzr = t * dz
+    printf "% .12e % .12e % .12e % .12e % .12e % .12e % .12e % .12e % .12e\n",
+            iso,  dzr, -dyr,
+           -dzr,  iso,  dxr,
+            dyr, -dxr,  iso
+  }'
+}
+S1UDEFN=$(gen_s1 0)
+S1U120N=$(gen_s1 120)
+S1U240N=$(gen_s1 240)
+S1UDEFT=$(gen_s1 -t 0)
+S1U120T=$(gen_s1 -t 120)
+S1U240T=$(gen_s1 -t 240)
+S1DDEFN=$(gen_s1 -m 0)
+S1D120N=$(gen_s1 -m 120)
+S1D240N=$(gen_s1 -m 240)
+S1DDEFT=$(gen_s1 -m -t 0)
+S1D120T=$(gen_s1 -m -t 120)
+S1D240T=$(gen_s1 -m -t 240)
+# 2nd shell
+DMI2N=$(awk -v x="$DMI2" 'BEGIN{print -1 * x}')
+DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 
 
 ########################################
@@ -91,7 +131,7 @@ DMI3T=$(awk -v x="$DMI3N" 'BEGIN{print -1 * x}')
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
 OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${ARRAY[$SLURM_ARRAY_TASK_ID]}/"  ## path output directory
-CNFSRC="${SRC}conf/sub3/constrained/"  # source of configuration files
+CNFSRC="${SRC}conf/sub6/constrained/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
 VAMP="vampire-serial"  # Vampire file base name
 EXCSRC="${SRC}${VAMP}"  ## Vampire executable in source directory
@@ -107,28 +147,38 @@ LOG="${OUT}proc.log"  ## logfile with std output
 mkdir -p "$META" "$CNFOUT"
 cp $EXCSRC ${BASH_SOURCE[0]} $OUT
 cp $EXCSRC $EXCOUT
-prepCnf $CNFSRC        \
-        $CNFOUT        \
-        "SIZEX=$SIZEX" \
-        "SIZEY=$SIZEY" \
-        "SIZEZ=$SIZEZ" \
-        "STEP=$STEP"   \
-        "INCR=$INCR"   \
-        "SEED=$SEED"   \
-        "TEMP=$TEMP"   \
-        "THETA=$THETA" \
-        "PHI=$PHI"     \
-        "ISO1=$ISO1"   \
-        "DMI1N=$DMI1N" \
-        "DMI1T=$DMI1T" \
-        "ISO2=$ISO2"   \
-        "ISO3=$ISO3"   \
-        "DMI3N=$DMI3N" \
-        "DMI3T=$DMI3T" \
-        "AISO=$AISO"   \
-        "DAMP=$DAMP"   \
-        "ISD1=$ISD1"   \
-        "ISD2=$ISD2"   \
+prepCnf $CNFSRC            \
+        $CNFOUT            \
+        "SIZEX=$SIZEX"     \
+        "SIZEY=$SIZEY"     \
+        "SIZEZ=$SIZEZ"     \
+        "STEP=$STEP"       \
+        "INCR=$INCR"       \
+        "RATE=$RATE"       \
+        "SEED=$SEED"       \
+        "TEMP=$TEMP"       \
+        "THETA=$THETA"     \
+        "PHI=$PHI"         \
+        "S1UDEFN=$S1UDEFN" \
+        "S1U120N=$S1U120N" \
+        "S1U240N=$S1U240N" \
+        "S1UDEFT=$S1UDEFT" \
+        "S1U120T=$S1U120T" \
+        "S1U240T=$S1U240T" \
+        "S1DDEFN=$S1DDEFN" \
+        "S1D120N=$S1D120N" \
+        "S1D240N=$S1D240N" \
+        "S1DDEFT=$S1DDEFT" \
+        "S1D120T=$S1D120T" \
+        "S1D240T=$S1D240T" \
+        "ISO2=$ISO2"       \
+        "DMI2N=$DMI2N"     \
+        "DMI2T=$DMI2T"     \
+        "ISO3=$ISO3"       \
+        "AISO=$AISO"       \
+        "DAMP=$DAMP"       \
+        "ISD1=$ISD1"       \
+        "ISD2=$ISD2"       \
         "ISD3=$ISD3"
 
 
@@ -138,7 +188,7 @@ prepCnf $CNFSRC        \
 cd $OUT
 ## run simulation
 $EXCOUT --input-file "${CNFOUT}input" \
-        --output-file "result"
+       --output-file "result"
 ## create povray file
 $VDC --povray                    \
      --input-file "atoms-coords" \
@@ -156,7 +206,7 @@ povray -W2000              \
        +KFI0               \
        +KFF${NFRAME}       \
        +O${META}/conf-.png \
-       ${OUT}spins.pov
+       ${OUT}spins.pov 
 
 
 ########################################
