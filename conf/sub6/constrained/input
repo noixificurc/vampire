@@ -31,7 +31,7 @@ sim:time-step = 1 !fs
 # configuration
 #------------------------------------------
 config:atoms
-config:atoms-output-rate = <RATE>
+config:atoms-output-rate = <SPIN>
 
 #------------------------------------------
 # Program and integrator details
@@ -43,7 +43,8 @@ sim:integrator = hybrid-constrained-monte-carlo
 #------------------------------------------
 # data output
 #------------------------------------------
-output:precision=15
+output:precision = 16
+output:output-rate = <OUTRATE>
 output:column-headers
 
 output:real-time

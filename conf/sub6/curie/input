@@ -38,7 +38,9 @@ sim:integrator = <INTEG>
 #------------------------------------------
 # data output
 #------------------------------------------
-output:precision=15
+output:precision = 16
+output:output-rate = <OUTRATE>
+output:column-headers
 
 output:electron-temperature
 output:material-magnetisation

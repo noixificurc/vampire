@@ -7,7 +7,7 @@
 #SBATCH --output=./proc.log
 #SBATCH --partition=all  
 ##SBATCH --nodelist=r3 
-##SBATCH --exclude=r2,r3,r4,r5
+#SBATCH --exclude=r2,r3
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:0
@@ -28,15 +28,14 @@ done
 #########################################
 ## configuration
 #########################################
-SIZEX=10.0
-SIZEY=10.0
-SIZEZ=10.0
-STEP=5000000
-STEP=50000000
-INCR=$(echo "${STEP} / 200" | bc)
+SIZEX=40.0
+SIZEY=40.0
+SIZEZ=40.0
+STEP=30000
+INCR=$(echo "${STEP} / 2000" | bc)
 RATE=$(echo "${STEP} / ${INCR} / 4" | bc)
 SEED=$SLURM_ARRAY_TASK_ID
-TEMP=0.0
+TEMP=$1
 THETA=${ARRAY1[$SLURM_ARRAY_TASK_ID]}
 PHI=${ARRAY2[$SLURM_ARRAY_TASK_ID]}
 ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * -18.7}')
@@ -131,7 +130,8 @@ DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 ########################################
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
-OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}/${DATE}-${ARRAY[$SLURM_ARRAY_TASK_ID]}/"  ## path output directory
+DATE_SHORT="$(date +'%y%m%d-%H%M')"
+OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}-${TEMP}/${DATE}-${TEMP}-${ARRAY[$SLURM_ARRAY_TASK_ID]}/"  ## path output directory
 CNFSRC="${SRC}conf/sub6/constrained/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
 VAMP="vampire-serial"  # Vampire file base name
@@ -191,23 +191,23 @@ cd $OUT
 $EXCOUT --input-file "${CNFOUT}input" \
        --output-file "result"
 ## create povray file
-$VDC --povray                    \
-     --input-file "atoms-coords" \
-     --vector-z 0,0,1            \
-     --slice 0,1,0,1,0,1         \
-     --camera-position 0,0.001,1
-## render spin configuration
-NFRAME=$(find ${OUT} -name 'spins-*.inc' -printf '%f\n' |
-         sed 's/spins-\([0-9]*\)\.inc/\1/' |
-         sort -n |
-         tail -1)  ## number of frames
-povray -W2000              \
-       -H1500              \
-       -D                  \
-       +KFI0               \
-       +KFF${NFRAME}       \
-       +O${META}/conf-.png \
-       ${OUT}spins.pov 
+#$VDC --povray                    \
+#     --input-file "atoms-coords" \
+#     --vector-z 0,0,1            \
+#     --slice 0,1,0,1,0,1         \
+#     --camera-position 0,0.001,1
+### render spin configuration
+#NFRAME=$(find ${OUT} -name 'spins-*.inc' -printf '%f\n' |
+#         sed 's/spins-\([0-9]*\)\.inc/\1/' |
+#         sort -n |
+#         tail -1)  ## number of frames
+#povray -W2000              \
+#       -H1500              \
+#       -D                  \
+#       +KFI0               \
+#       +KFF${NFRAME}       \
+#       +O${META}/conf-.png \
+#       ${OUT}spins.pov 
 
 
 ########################################

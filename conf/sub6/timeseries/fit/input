@@ -32,7 +32,7 @@ sim:time-step = 1 !fs
 # configuration
 #------------------------------------------
 #config:atoms
-#config:atoms-output-rate = <RATE>
+#config:atoms-output-rate = <SPIN>
 
 #------------------------------------------
 # GPU
@@ -49,7 +49,8 @@ sim:integrator = <INTEG>
 #------------------------------------------
 # data output
 #------------------------------------------
-output:precision = 15
+output:precision = 16
+output:output-rate = <OUTRATE>
 output:column-headers
 
 output:real-time

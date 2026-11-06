@@ -1,0 +1,73 @@
+#------------------------------------------
+# Mn3Sn input file
+#------------------------------------------
+
+#------------------------------------------
+# Creation attributes:
+#------------------------------------------
+dimensions:system-size-x = <SIZEX> !nm
+dimensions:system-size-y = <SIZEY> !nm
+dimensions:system-size-z = <SIZEZ> !nm
+
+material:unit-cell-file = ./conf/mn3sn.ucf
+
+#create:periodic-boundaries = xy
+create:spin-initialisation-random-seed = <SEED>
+
+#------------------------------------------
+# Material Files:
+#------------------------------------------
+material:file = ./conf/mn3sn.mat
+
+#------------------------------------------
+# Simulation attributes:
+#------------------------------------------
+sim:temperature = <TEMP>
+
+sim:time-steps-increment = <INCR>
+sim:total-time-steps = <STEP>
+sim:time-step = 1 !fs
+
+sim:applied-field-strength    = <BMAG> !T
+sim:applied-field-unit-vector = <BDIR>
+#sim:applied-field-angle-phi   = 90
+#sim:applied-field-angle-theta = 00
+
+#------------------------------------------
+# configuration
+#------------------------------------------
+config:atoms
+config:atoms-output-rate = <SPIN>
+
+#------------------------------------------
+# GPU
+#------------------------------------------
+gpu:acceleration = on
+
+#------------------------------------------
+# Program and integrator details
+#------------------------------------------
+sim:program = time-series
+sim:integrator = <INTEG>
+#montecarlo:algorithm = uniform
+
+#------------------------------------------
+# data output
+#------------------------------------------
+output:precision = 16
+output:output-rate = <OUTRATE>
+output:column-headers
+
+output:real-time
+output:electron-temperature
+output:phonon-temperature
+output:material-magnetisation
+output:magnetisation
+output:total-energy
+output:material-constraint-phi
+output:material-constraint-theta
+output:material-torque
+output:applied-field-unit-vector
+output:applied-field-strength
+
+#screen:time-steps
