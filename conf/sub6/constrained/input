@@ -30,8 +30,8 @@ sim:time-step = 1 !fs
 #------------------------------------------
 # configuration
 #------------------------------------------
-config:atoms
-config:atoms-output-rate = <SPIN>
+#config:atoms
+#config:atoms-output-rate = <SPIN>
 
 #------------------------------------------
 # Program and integrator details

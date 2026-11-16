@@ -7,31 +7,31 @@
 #SBATCH --output=./proc.log
 #SBATCH --partition=all  
 ##SBATCH --nodelist=r1
-##SBATCH --exclude=r2,r3,r5
+##SBATCH --exclude=r2,r3
 #SBATCH --ntasks=1       
 #SBATCH --cpus-per-task=1
 #SBATCH --gres=gpu:0
-#SBATCH --array=0-0:1  ## start and end indices are included
+#SBATCH --array=0-61:1  ## start and end indices are included
 
-ARRAY=({000..005}.{0..9..5} {006..030}.0)
+ARRAY=({00..30}.{0..5..5})
 
 
 #########################################
 ## configuration
 #########################################
-SIZEX=9.0
-SIZEY=9.0
-SIZEZ=9.0
-STEP=30000
+SIZEX=40.0
+SIZEY=40.0
+SIZEZ=40.0
+STEP=10000
 INCR=1
 SPIN=$(echo "${STEP} / ${INCR} / 2" | bc)
-OUTRATE=1000
+OUTRATE=1
 SEED=$SLURM_ARRAY_TASK_ID
 TEMP=${ARRAY[$SLURM_ARRAY_TASK_ID]}
-THETA=80.0
+THETA=70.0
 PHI=0.0
 ISO1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * -18.7}')
-DMI1=$(awk -v x="$1" 'BEGIN{print 1.602176634 * 10^-22 * x}')
+DMI1=$(awk 'BEGIN{print 1.602176634 * 10^-22 * 0.5}')
 ISO2=$(awk -v x="$ISO1" 'BEGIN{print  0 * x}')
 DMI2=$(awk -v x="$DMI1" 'BEGIN{print  0 * x}')
 ISO3=$(awk -v x="$ISO1" 'BEGIN{print -1 * x}')
@@ -123,7 +123,7 @@ DMI2T=$(awk -v x="$DMI2N" 'BEGIN{print -1 * x}')
 SRC="$(pwd)/"
 DATE="$(date +'%y%m%d-%H%M%S')-$(date +%N | cut -c1-6)"  ## date
 DATE_SHORT="$(date +'%y%m%d-%H%M')"
-OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}-${1/./}/${DATE}-${TEMP/./}/"  ## path output directory
+OUT="${SRC}../../data/${SLURM_ARRAY_JOB_ID}-${THETA/./}/${DATE}-${TEMP/./}/"  ## path output directory
 CNFSRC="${SRC}conf/sub6/constrained/"  # source of configuration files
 CNFOUT="${OUT}conf/"  # destination of configuration files
 VAMP="vampire-serial"  # Vampire file base name
