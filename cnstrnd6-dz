@@ -188,8 +188,9 @@ prepCnf $CNFSRC            \
 ########################################
 cd $OUT
 ## run simulation
-$EXCOUT --input-file "${CNFOUT}input" \
-       --output-file "result"
+srun --output="$LOG"                       \
+     $EXCOUT --input-file "${CNFOUT}input" \
+            --output-file "result"
 ## create povray file
 #$VDC --povray                    \
 #     --input-file "atoms-coords" \
